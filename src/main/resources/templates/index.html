@@ -14,7 +14,23 @@
         <p class="lead">A simple URL shortener service. Create short, easy-to-share links.</p>
     </div>
 
-    <h2 class="mt-5">Public Shortned URLs</h2>
+    <div>
+        <div>
+            <h5>Create a Short URL</h5>
+        </div>
+        <div>
+            <form th:action="@{/short-urls}" method="post">
+                <div>
+                    <label for="originalUrl" class="form-label">Original URL</label>
+                    <input type="text" class="form-control" id="originalUrl"
+                            placeholder="https://example.com/my-original-url/">
+                </div>
+                <button type="submit">Shorten URL</button>
+            </form>
+        </div>
+    </div>
+
+    <h2 class="mt-5">Public Shortend URLs</h2>
     <div th:if="${shortUrls.isEmpty()}" class="alert alert-info">
         No public URL's has been created yet.
     </div>
