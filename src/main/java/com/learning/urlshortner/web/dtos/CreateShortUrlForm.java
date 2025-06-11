@@ -1,4 +1,5 @@
-package com.learning.urlshortner.web.controllers.dtos;
+package com.learning.urlshortner.web.dtos;
+
 
 import jakarta.validation.constraints.NotBlank;
 
