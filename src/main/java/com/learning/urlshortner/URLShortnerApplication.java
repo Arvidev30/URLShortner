@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class URLShortner {
+public class URLShortnerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(URLShortner.class, args);
+		SpringApplication.run(URLShortnerApplication.class, args);
 	}
 }

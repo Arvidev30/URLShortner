@@ -1,6 +1,5 @@
 package com.learning.urlshortner.web.controllers;
 
-import com.learning.urlshortner.domain.entities.ShortUrl;
 import com.learning.urlshortner.domain.models.ShortUrlDTO;
 import com.learning.urlshortner.domain.services.ShortURLService;
 import org.springframework.stereotype.Controller;
