@@ -17,4 +17,6 @@ public interface ShortURLRepository extends JpaRepository<ShortUrl, Long> {
     // @EntityGraph(attributePaths = {"createdBy"})  This also provides the same result as above left join
     //Or we can use DTO's to avoid the lazy loading, getting all the data to the DTO classes and then we can show it in the web.
     List<ShortUrl> findPublicShortUrls();
+
+    boolean existsByShortKey(String shortKey);
 }
