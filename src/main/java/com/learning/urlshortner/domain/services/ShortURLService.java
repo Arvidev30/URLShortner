@@ -5,6 +5,7 @@ import com.learning.urlshortner.domain.models.CreateShortUrlCmd;
 import com.learning.urlshortner.domain.models.ShortUrlDTO;
 import com.learning.urlshortner.domain.repositories.ShortURLRepository;
 import com.learning.urlshortner.web.ApplicationProperties;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -13,6 +14,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
+@Transactional  // Rollbacks when any one of the db tables has error when updated. So none of the tables will be updated.
 public class ShortURLService {
     private final ShortURLRepository shortURLRepository;
     private final EntityMapper entityMapper;
