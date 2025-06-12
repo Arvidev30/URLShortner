@@ -1,7 +1,6 @@
 package com.learning.urlshortner.domain.repositories;
 
 import com.learning.urlshortner.domain.entities.ShortUrl;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
