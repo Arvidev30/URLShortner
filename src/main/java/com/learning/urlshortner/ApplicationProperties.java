@@ -1,4 +1,4 @@
-package com.learning.urlshortner.web;
+package com.learning.urlshortner;
 
 
 import jakarta.validation.constraints.Max;
