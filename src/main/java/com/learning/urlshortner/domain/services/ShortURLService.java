@@ -4,17 +4,18 @@ import com.learning.urlshortner.domain.entities.ShortUrl;
 import com.learning.urlshortner.domain.models.CreateShortUrlCmd;
 import com.learning.urlshortner.domain.models.ShortUrlDTO;
 import com.learning.urlshortner.domain.repositories.ShortURLRepository;
-import com.learning.urlshortner.web.ApplicationProperties;
-import jakarta.transaction.Transactional;
+import com.learning.urlshortner.ApplicationProperties;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@Transactional  // Rollbacks when any one of the db tables has error when updated. So none of the tables will be updated.
+@Transactional(readOnly = true)  // Rollbacks when any one of the db tables has error when updated. So none of the tables will be updated.
 public class ShortURLService {
     private final ShortURLRepository shortURLRepository;
     private final EntityMapper entityMapper;
@@ -30,7 +31,7 @@ public class ShortURLService {
         return shortURLRepository.findPublicShortUrls()
                 .stream().map(entityMapper::toShortUrlDTO).toList();
     }
-
+    @Transactional
     public ShortUrlDTO createShortUrl(CreateShortUrlCmd cmd){
 
         if(properties.validateOriginalUrl()){
@@ -74,5 +75,21 @@ public class ShortURLService {
         }
 
         return sb.toString();
+    }
+
+    @Transactional
+    public Optional<ShortUrlDTO> accessShortUrl(String shortKey){
+        Optional<ShortUrl> shortUrlOptional = shortURLRepository.findByShortKey(shortKey);
+        if(shortUrlOptional.isEmpty()){
+            return Optional.empty();
+        }
+        ShortUrl shortUrl = shortUrlOptional.get();
+        if(shortUrl.getExpiresAt() != null && shortUrl.getExpiresAt().isBefore(Instant.now())){
+            return Optional.empty();
+        }
+        shortUrl.setClickCount(shortUrl.getClickCount()+1);
+        shortURLRepository.save(shortUrl);
+        return shortUrlOptional.map(entityMapper::toShortUrlDTO);
+
     }
 }
