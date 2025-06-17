@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ShortURLRepository extends JpaRepository<ShortUrl, Long> {
 
@@ -17,5 +18,9 @@ public interface ShortURLRepository extends JpaRepository<ShortUrl, Long> {
     //Or we can use DTO's to avoid the lazy loading, getting all the data to the DTO classes and then we can show it in the web.
     List<ShortUrl> findPublicShortUrls();
 
+    // @Query ("select count(su) > 0 from ShortUrl su where su.shortKey = :shortKey")
     boolean existsByShortKey(String shortKey);
+    // Naming convention of spring jpa to check the count of the shorkey present, if >0 true else false
+
+    Optional<ShortUrl> findByShortKey(String shortKey);
 }
