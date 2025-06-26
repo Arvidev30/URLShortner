@@ -29,4 +29,9 @@ public class SecurityUtils {
 
         return userRepository.findByEmail(email).orElseThrow();
     }
+
+    public Long getCurrentUserId(){
+        User user = getCurrentUser();
+        return user != null ? user.getId() : null;
+    }
 }
