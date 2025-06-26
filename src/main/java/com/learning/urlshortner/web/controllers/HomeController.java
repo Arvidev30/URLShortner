@@ -1,5 +1,6 @@
 package com.learning.urlshortner.web.controllers;
 
+import com.learning.urlshortner.domain.entities.User;
 import com.learning.urlshortner.domain.exception.ShortURLNotFoundException;
 import com.learning.urlshortner.domain.models.CreateShortUrlCmd;
 import com.learning.urlshortner.domain.models.ShortUrlDTO;
@@ -24,10 +25,12 @@ public class HomeController {
 
     private final ShortURLService shortURLService;
     private final ApplicationProperties properties;
+    private final SecurityUtils securityUtils;
 
-    public HomeController(ShortURLService shortURLService, ApplicationProperties properties) {
+    public HomeController(ShortURLService shortURLService, ApplicationProperties properties, SecurityUtils securityUtils) {
         this.shortURLService = shortURLService;
         this.properties = properties;
+        this.securityUtils = securityUtils;
     }
 
 
@@ -41,7 +44,7 @@ public class HomeController {
 
         // method 3 standard method JPQL query method
         List<ShortUrlDTO> shortUrls = shortURLService.findAllPublicShortUrls();
-
+        User currentUser = securityUtils.getCurrentUser();
         model.addAttribute("shortUrls",shortUrls);
         model.addAttribute("baseUrl",properties.baseUrl());
         model.addAttribute("createShortUrlForm", new CreateShortUrlForm(""));
@@ -81,6 +84,11 @@ public class HomeController {
         }
         ShortUrlDTO shortUrlDTO = shortUrlDTOOptional.get();
         return "redirect:"+shortUrlDTO.originalUrl();
+    }
+
+    @GetMapping("/login")
+    String loginForm(){
+        return "login";
     }
 
 }
