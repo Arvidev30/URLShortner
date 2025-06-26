@@ -1,0 +1,1 @@
+update users set password = '$2a$10$0ZNBYreUs7uwzSKLYdB6ve2WhG3VUVVL0sEUk7pAAIEHYP24lIFd6' where email = 'arvidevacc@gmail.com';
