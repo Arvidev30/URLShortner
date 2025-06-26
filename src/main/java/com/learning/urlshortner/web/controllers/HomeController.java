@@ -44,10 +44,10 @@ public class HomeController {
 
         // method 3 standard method JPQL query method
         List<ShortUrlDTO> shortUrls = shortURLService.findAllPublicShortUrls();
-        User currentUser = securityUtils.getCurrentUser();
+
         model.addAttribute("shortUrls",shortUrls);
         model.addAttribute("baseUrl",properties.baseUrl());
-        model.addAttribute("createShortUrlForm", new CreateShortUrlForm(""));
+        model.addAttribute("createShortUrlForm", new CreateShortUrlForm("", null, false));
         return "index";
     }
 
@@ -65,7 +65,11 @@ public class HomeController {
         }
 
         try {
-            CreateShortUrlCmd cmd = new CreateShortUrlCmd(form.originalUrl());
+            Long userId = securityUtils.getCurrentUserId();
+            CreateShortUrlCmd cmd = new CreateShortUrlCmd(form.originalUrl(),
+                                                         form.expirationInDays(),
+                                                         form.isPrivate(),
+                                                         userId);
             var shortUrlDto = shortURLService.createShortUrl(cmd);
             redirectAttributes.addFlashAttribute("successMessage", "Short URL created successfully "+ properties.baseUrl() +"/s/" + shortUrlDto.shortKey());
         }
@@ -78,7 +82,8 @@ public class HomeController {
 
     @GetMapping("/s/{shortKey}")
     String redirectToOriginalUrl(@PathVariable String shortKey){
-        Optional<ShortUrlDTO> shortUrlDTOOptional = shortURLService.accessShortUrl(shortKey);
+        Long userId = securityUtils.getCurrentUserId();
+        Optional<ShortUrlDTO> shortUrlDTOOptional = shortURLService.accessShortUrl(shortKey, userId);
         if(shortUrlDTOOptional.isEmpty()){
             throw new ShortURLNotFoundException("Invalid Short Key: "+shortKey);
         }
