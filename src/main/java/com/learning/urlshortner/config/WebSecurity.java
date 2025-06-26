@@ -27,7 +27,7 @@ public class WebSecurity {
                                 "/js/**", "/images/**", "/short-urls", "/s/**", "/register"
                         ).permitAll()
                         .requestMatchers("my-urls").authenticated()
-                        .requestMatchers("/admin/**").authenticated()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
